@@ -5,11 +5,12 @@
 #include "medecin.h"
 #include "rendez_vous.h"
 
-// Make sure these function declarations are here
+// Fonctions pour sauvegarder les données dans des fichiers
 int savePatients(Patient* patientList, const char* filename);
 int saveMedecins(Medecin* medecinList, const char* filename);
 int saveRendezVous(RendezVous* rendezVousList, const char* filename);
 
+// Fonctions pour charger les données depuis des fichiers
 Patient* loadPatients(const char* filename);
 Medecin* loadMedecins(const char* filename);
 RendezVous* loadRendezVous(const char* filename);

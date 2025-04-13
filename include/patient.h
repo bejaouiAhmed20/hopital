@@ -1,44 +1,35 @@
 #ifndef PATIENT_H
 #define PATIENT_H
 
-#define MAX_NAME_LENGTH 50
-#define MAX_CONDITION_LENGTH 100
-
+// Définition des priorités pour les patients
 typedef enum {
-    EMERGENCY = 1,
-    URGENT = 2,
-    NORMAL = 3,
-    LOW = 4
+    EMERGENCY = 1,  // Urgence absolue
+    URGENT = 2,     // Urgent
+    NORMAL = 3,     // Normal
+    LOW = 4         // Faible priorité
 } Priority;
 
+// Longueurs maximales pour les chaînes de caractères
+#define MAX_NAME_LENGTH 100
+#define MAX_CONDITION_LENGTH 200
+
+// Structure pour représenter un patient
 typedef struct Patient {
-    int id;
-    char name[MAX_NAME_LENGTH];
-    int age;
-    char condition[MAX_CONDITION_LENGTH];
-    Priority priority;
-    struct Patient* next;
+    int id;                             // Identifiant unique du patient
+    char name[MAX_NAME_LENGTH];         // Nom du patient
+    int age;                            // Âge du patient
+    char condition[MAX_CONDITION_LENGTH]; // État de santé ou raison de la visite
+    Priority priority;                  // Niveau de priorité
+    struct Patient* next;               // Pointeur vers le patient suivant dans la liste
 } Patient;
 
-// Function to create a new patient
+// Fonctions de gestion des patients
 Patient* createPatient(int id, const char* name, int age, const char* condition, Priority priority);
-
-// Function to add a patient to the list
-Patient* addPatient(Patient* head, Patient* newPatient);
-
-// Function to display a single patient
-void displayPatient(const Patient* patient);
-
-// Function to display all patients
-void displayAllPatients(const Patient* head);
-
-// Recursive function to display patients in reverse order
-void displayPatientsReverse(const Patient* head);
-
-// Function to search for a patient by ID
-Patient* findPatientById(const Patient* head, int id);
-
-// Function to free all patients in the list
-void freePatientList(Patient* head);
+Patient* addPatient(Patient* patientList, Patient* newPatient);
+void displayPatient(Patient* patient);
+void displayAllPatients(Patient* patientList);
+void displayPatientsReverse(Patient* patientList);
+Patient* findPatientById(Patient* patientList, int id);
+void freePatientList(Patient* patientList);
 
 #endif /* PATIENT_H */

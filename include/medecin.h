@@ -1,38 +1,24 @@
 #ifndef MEDECIN_H
 #define MEDECIN_H
 
-#define MAX_NAME_LENGTH 50
+// Longueurs maximales pour les chaînes de caractères
+#define MAX_NAME_LENGTH 100
 #define MAX_SPECIALITY_LENGTH 100
 
+// Structure pour représenter un médecin
 typedef struct Medecin {
-    int id;
-    char name[MAX_NAME_LENGTH];
-    char speciality[MAX_SPECIALITY_LENGTH];
-    struct Medecin* next;
+    int id;                               // Identifiant unique du médecin
+    char name[MAX_NAME_LENGTH];           // Nom du médecin
+    char speciality[MAX_SPECIALITY_LENGTH]; // Spécialité du médecin
+    struct Medecin* next;                 // Pointeur vers le médecin suivant dans la liste
 } Medecin;
 
-// Function to create a new doctor
+// Fonctions de gestion des médecins
 Medecin* createMedecin(int id, const char* name, const char* speciality);
-
-// Function to add a doctor to the list
-Medecin* addMedecin(Medecin* head, Medecin* newMedecin);
-
-// Function to display a single doctor
-void displayMedecin(const Medecin* medecin);
-
-// Function to display all doctors
-void displayAllMedecins(const Medecin* head);
-
-// Function to search for a doctor by ID
-Medecin* findMedecinById(const Medecin* head, int id);
-
-// Function to free all doctors in the list
-void freeMedecinList(Medecin* head);
-
-// Function to save doctors to a file
-int saveMedecins(const Medecin* head, const char* filename);
-
-// Function to load doctors from a file
-Medecin* loadMedecins(const char* filename);
+Medecin* addMedecin(Medecin* medecinList, Medecin* newMedecin);
+void displayMedecin(Medecin* medecin);
+void displayAllMedecins(Medecin* medecinList);
+Medecin* findMedecinById(Medecin* medecinList, int id);
+void freeMedecinList(Medecin* medecinList);
 
 #endif /* MEDECIN_H */
