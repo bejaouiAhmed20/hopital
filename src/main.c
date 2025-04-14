@@ -7,10 +7,10 @@
 #include "../include/fichier.h"
 #include "../include/ui.h"
 
-// Chemins des fichiers de données
-#define PATIENTS_FILE "c:\\Users\\bejao\\Desktop\\hopital 2\\data\\patients.txt"
-#define MEDECINS_FILE "c:\\Users\\bejao\\Desktop\\hopital 2\\data\\medecins.txt"
-#define RENDEZ_VOUS_FILE "c:\\Users\\bejao\\Desktop\\hopital 2\\data\\rendez_vous.txt"
+// Chemins des fichiers de données (utilisation de chemins relatifs)
+#define PATIENTS_FILE "data/patients.txt"
+#define MEDECINS_FILE "data/medecins.txt"
+#define RENDEZ_VOUS_FILE "data/rendez_vous.txt"
 
 int main() {
     // Initialisation des listes
