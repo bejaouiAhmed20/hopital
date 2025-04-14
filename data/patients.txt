@@ -5,3 +5,4 @@
 5,salem,50,normal,3
 10,ahmed,6422476,ohamed,1
 6,salem,50,normal,4
+7,aziz,20,normal,1

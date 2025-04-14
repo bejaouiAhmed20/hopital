@@ -1,5 +1,5 @@
 #include "../include/ui.h"
-#include "../include/fichier.h"  // Add this include for save/load functions
+#include "../include/fichier.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,9 +32,8 @@ void addNewPatientMenu(Patient** patientList) {
     
     printf("Entrez l'ID du patient: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Check if ID already exists
     if (findPatientById(*patientList, id) != NULL) {
         printf("Erreur: Un patient avec l'ID %d existe déjà\n", id);
         return;
@@ -42,21 +41,20 @@ void addNewPatientMenu(Patient** patientList) {
     
     printf("Entrez le nom du patient: ");
     fgets(name, MAX_NAME_LENGTH, stdin);
-    name[strcspn(name, "\n")] = '\0'; // Remove the newline character
+    name[strcspn(name, "\n")] = '\0';
     
     printf("Entrez l'âge du patient: ");
     scanf("%d", &age);
-    getchar(); // Consume the newline character
+    getchar();
     
     printf("Entrez la condition du patient: ");
     fgets(condition, MAX_CONDITION_LENGTH, stdin);
-    condition[strcspn(condition, "\n")] = '\0'; // Remove the newline character
+    condition[strcspn(condition, "\n")] = '\0';
     
     printf("Entrez la priorité (1=Urgence, 2=Urgent, 3=Normal, 4=Faible): ");
     scanf("%d", &priorityChoice);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Validate priority
     if (priorityChoice < 1 || priorityChoice > 4) {
         printf("Priorité invalide. Réglage sur Normal.\n");
         priority = NORMAL;
@@ -64,7 +62,6 @@ void addNewPatientMenu(Patient** patientList) {
         priority = (Priority)priorityChoice;
     }
     
-    // Create and add the new patient
     Patient* newPatient = createPatient(id, name, age, condition, priority);
     if (newPatient != NULL) {
         *patientList = addPatient(*patientList, newPatient);
@@ -85,7 +82,7 @@ void searchPatientByIdMenu(Patient* patientList) {
     printf("\n===== Rechercher un Patient par ID =====\n");
     printf("Entrez l'ID du patient: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
     Patient* patient = findPatientById(patientList, id);
     if (patient != NULL) {
@@ -115,9 +112,8 @@ void addNewMedecinMenu(Medecin** medecinList) {
     
     printf("Entrez l'ID du médecin: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Check if ID already exists
     if (findMedecinById(*medecinList, id) != NULL) {
         printf("Erreur: Un médecin avec l'ID %d existe déjà\n", id);
         return;
@@ -125,13 +121,12 @@ void addNewMedecinMenu(Medecin** medecinList) {
     
     printf("Entrez le nom du médecin: ");
     fgets(name, MAX_NAME_LENGTH, stdin);
-    name[strcspn(name, "\n")] = '\0'; // Remove the newline character
+    name[strcspn(name, "\n")] = '\0';
     
     printf("Entrez la spécialité du médecin: ");
     fgets(speciality, MAX_SPECIALITY_LENGTH, stdin);
-    speciality[strcspn(speciality, "\n")] = '\0'; // Remove the newline character
+    speciality[strcspn(speciality, "\n")] = '\0';
     
-    // Create and add the new doctor
     Medecin* newMedecin = createMedecin(id, name, speciality);
     if (newMedecin != NULL) {
         *medecinList = addMedecin(*medecinList, newMedecin);
@@ -152,7 +147,7 @@ void searchMedecinByIdMenu(Medecin* medecinList) {
     printf("\n===== Rechercher un Médecin par ID =====\n");
     printf("Entrez l'ID du médecin: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
     Medecin* medecin = findMedecinById(medecinList, id);
     if (medecin != NULL) {
@@ -171,9 +166,8 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     
     printf("Entrez l'ID du rendez-vous: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Check if ID already exists
     if (findRendezVousById(*rendezVousList, id) != NULL) {
         printf("Erreur: Un rendez-vous avec l'ID %d existe déjà\n", id);
         return;
@@ -181,9 +175,8 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     
     printf("Entrez l'ID du patient: ");
     scanf("%d", &patientId);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Check if patient exists
     if (findPatientById(patientList, patientId) == NULL) {
         printf("Erreur: Aucun patient trouvé avec l'ID %d\n", patientId);
         return;
@@ -191,9 +184,8 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     
     printf("Entrez l'ID du médecin: ");
     scanf("%d", &medecinId);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Check if doctor exists
     if (findMedecinById(medecinList, medecinId) == NULL) {
         printf("Erreur: Aucun médecin trouvé avec l'ID %d\n", medecinId);
         return;
@@ -201,13 +193,12 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     
     printf("Entrez la date du rendez-vous (jour mois année): ");
     scanf("%d %d %d", &date.jour, &date.mois, &date.annee);
-    getchar(); // Consume the newline character
+    getchar();
     
     printf("Entrez l'heure du rendez-vous (heure minute): ");
     scanf("%d %d", &date.heure, &date.minute);
-    getchar(); // Consume the newline character
+    getchar();
     
-    // Create and add the new appointment
     RendezVous* newRendezVous = createRendezVous(id, patientId, medecinId, date);
     if (newRendezVous != NULL) {
         *rendezVousList = addRendezVous(*rendezVousList, newRendezVous);
@@ -228,7 +219,7 @@ void searchRendezVousByIdMenu(RendezVous* rendezVousList, Patient* patientList, 
     printf("\n===== Rechercher un Rendez-vous par ID =====\n");
     printf("Entrez l'ID du rendez-vous: ");
     scanf("%d", &id);
-    getchar(); // Consume the newline character
+    getchar();
     
     RendezVous* rendezVous = findRendezVousById(rendezVousList, id);
     if (rendezVous != NULL) {
@@ -253,4 +244,4 @@ void saveDataMenu(Patient* patientList, Medecin* medecinList, RendezVous* rendez
     printf("Rendez-vous sauvegardes: %d\n", rendezVousSaved);
     
     printf("Toutes les donnees ont ete sauvegardees avec succes!\n");
-}  // Add this closing brace
+}

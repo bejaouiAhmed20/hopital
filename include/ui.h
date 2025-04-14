@@ -5,7 +5,6 @@
 #include "medecin.h"
 #include "rendez_vous.h"
 
-// Fonctions d'interface utilisateur
 void displayMainMenu();
 void addNewPatientMenu(Patient** patientList);
 void displayAllPatientsMenu(Patient* patientList);
@@ -20,4 +19,4 @@ void searchRendezVousByIdMenu(RendezVous* rendezVousList, Patient* patientList, 
 void saveDataMenu(Patient* patientList, Medecin* medecinList, RendezVous* rendezVousList, 
                  const char* patientsFile, const char* medecinsFile, const char* rendezVousFile);
 
-#endif /* UI_H */
+#endif

@@ -5,14 +5,12 @@
 #include "medecin.h"
 #include "rendez_vous.h"
 
-// Fonctions pour sauvegarder les données dans des fichiers
-int savePatients(Patient* patientList, const char* filename);
-int saveMedecins(Medecin* medecinList, const char* filename);
-int saveRendezVous(RendezVous* rendezVousList, const char* filename);
+int savePatients(const Patient* patientList, const char* filename);
+int saveMedecins(const Medecin* medecinList, const char* filename);
+int saveRendezVous(const RendezVous* rendezVousList, const char* filename);
 
-// Fonctions pour charger les données depuis des fichiers
 Patient* loadPatients(const char* filename);
 Medecin* loadMedecins(const char* filename);
 RendezVous* loadRendezVous(const char* filename);
 
-#endif /* FICHIER_H */
+#endif
