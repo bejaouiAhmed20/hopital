@@ -4,27 +4,35 @@
 #include "patient.h"
 #include "medecin.h"
 
+// Structure représentant une date et heure
 typedef struct {
-    int jour;
-    int mois;
-    int annee;
-    int heure;
-    int minute;
+    int jour;    // Jour du mois
+    int mois;    // Mois de l'année
+    int annee;   // Année
+    int heure;   // Heure (format 24h)
+    int minute;  // Minute
 } Date;
 
+// Structure représentant un rendez-vous
 typedef struct RendezVous {
-    int id;
-    int patientId;
-    int medecinId;
-    Date date;
-    struct RendezVous* next;
+    int id;                  // Identifiant unique
+    int patientId;           // ID du patient concerné
+    int medecinId;           // ID du médecin concerné
+    Date date;               // Date et heure du rendez-vous
+    struct RendezVous* suivant; // Pointeur vers le rendez-vous suivant
 } RendezVous;
 
-RendezVous* createRendezVous(int id, int patientId, int medecinId, Date date);
-RendezVous* addRendezVous(RendezVous* rendezVousList, RendezVous* newRendezVous);
-void displayRendezVous(const RendezVous* rendezVous, const Patient* patientList, const Medecin* medecinList);
-void displayAllRendezVous(const RendezVous* rendezVousList, const Patient* patientList, const Medecin* medecinList);
-RendezVous* findRendezVousById(const RendezVous* rendezVousList, int id);
-void freeRendezVousList(RendezVous* rendezVousList);
+// Crée un nouveau rendez-vous avec les informations fournies
+RendezVous* creerRendezVous(int id, int patientId, int medecinId, Date date);
+// Ajoute un rendez-vous à la liste des rendez-vous
+RendezVous* ajouterRendezVous(RendezVous* listeRendezVous, RendezVous* nouveauRendezVous);
+// Affiche les informations d'un rendez-vous
+void afficherRendezVous(const RendezVous* rendezVous, const Patient* listePatients, const Medecin* listeMedecins);
+// Affiche tous les rendez-vous de la liste
+void afficherTousRendezVous(const RendezVous* listeRendezVous, const Patient* listePatients, const Medecin* listeMedecins);
+// Recherche un rendez-vous par son ID
+RendezVous* trouverRendezVousParId(const RendezVous* listeRendezVous, int id);
+// Libère la mémoire allouée pour la liste des rendez-vous
+void libererListeRendezVous(RendezVous* listeRendezVous);
 
 #endif

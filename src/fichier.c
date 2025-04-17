@@ -3,178 +3,173 @@
 #include <stdlib.h>
 #include <string.h>
 
-int savePatients(const Patient* head, const char* filename) {
+int sauvegarderPatients(const Patient* tete, const char* nomFichier) {
     // Essayer de créer le répertoire data avant d'ouvrir le fichier
     system("mkdir data 2> nul");
     
-    FILE* file = fopen(filename, "w");
+    FILE* file = fopen(nomFichier, "w");
     if (file == NULL) {
-        printf("Error: Could not open file for writing: %s\n", filename);
+        printf("Erreur: Impossible d'ouvrir le fichier pour l'écriture: %s\n", nomFichier);
         return 0;
     }
     
-    const Patient* current = head;
+    const Patient* courant = tete;
     int count = 0;
     
-    while (current != NULL) {
+    while (courant != NULL) {
         fprintf(file, "%d,%s,%d,%s,%d\n", 
-                current->id, 
-                current->name, 
-                current->age, 
-                current->condition, 
-                current->priority);
-        
-        current = current->next;
+                courant->id, 
+                courant->nom,
+                courant->age, 
+                courant->condition, 
+                courant->priorite);
         count++;
+        courant = courant->suivant;
     }
     
     fclose(file);
     return count;
 }
 
-Patient* loadPatients(const char* filename) {
-    FILE* file = fopen(filename, "r");
+Patient* chargerPatients(const char* nomFichier) {
+    FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {
-        printf("Warning: Could not open file for reading: %s\n", filename);
+        printf("Avertissement: Impossible d'ouvrir le fichier pour la lecture: %s\n", nomFichier);
         return NULL;
     }
     
-    Patient* head = NULL;
-    char line[MAX_NAME_LENGTH + MAX_CONDITION_LENGTH + 50];
+    Patient* tete = NULL;
+    char ligne[MAX_NOM_LONGUEUR + MAX_CONDITION_LONGUEUR + 50];
     
-    while (fgets(line, sizeof(line), file) != NULL) {
-        int id, age, priorityInt;
-        char name[MAX_NAME_LENGTH];
-        char condition[MAX_CONDITION_LENGTH];
+    while (fgets(ligne, sizeof(ligne), file) != NULL) {
+        int id, age, prioriteInt;
+        char nom[MAX_NOM_LONGUEUR];
+        char condition[MAX_CONDITION_LONGUEUR];
         
-        if (sscanf(line, "%d,%[^,],%d,%[^,],%d", 
-                  &id, name, &age, condition, &priorityInt) == 5) {
+        if (sscanf(ligne, "%d,%[^,],%d,%[^,],%d", &id, nom, &age, condition, &prioriteInt) == 5) {
+            Priorite priorite = (Priorite)prioriteInt;
             
-            Priority priority = (Priority)priorityInt;
-            
-            Patient* newPatient = createPatient(id, name, age, condition, priority);
-            if (newPatient != NULL) {
-                head = addPatient(head, newPatient);
+            Patient* nouveauPatient = creerPatient(id, nom, age, condition, priorite);
+            if (nouveauPatient != NULL) {
+                tete = ajouterPatient(tete, nouveauPatient);
             }
         }
     }
     
     fclose(file);
-    return head;
+    return tete;
 }
 
-int saveMedecins(const Medecin* head, const char* filename) {
+int sauvegarderMedecins(const Medecin* tete, const char* nomFichier) {
     // Essayer de créer le répertoire data avant d'ouvrir le fichier
     system("mkdir data 2> nul");
     
-    FILE* file = fopen(filename, "w");
+    FILE* file = fopen(nomFichier, "w");
     if (file == NULL) {
-        printf("Error: Could not open file for writing: %s\n", filename);
+        printf("Erreur: Impossible d'ouvrir le fichier pour l'écriture: %s\n", nomFichier);
         return 0;
     }
     
-    const Medecin* current = head;
+    const Medecin* courant = tete;
     int count = 0;
     
-    while (current != NULL) {
+    while (courant != NULL) {
         fprintf(file, "%d,%s,%s\n", 
-                current->id, 
-                current->name, 
-                current->speciality);
-        
-        current = current->next;
+                courant->id, 
+                courant->nom,
+                courant->specialite);
         count++;
+        courant = courant->suivant;
     }
     
     fclose(file);
     return count;
 }
 
-Medecin* loadMedecins(const char* filename) {
-    FILE* file = fopen(filename, "r");
+Medecin* chargerMedecins(const char* nomFichier) {
+    FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {
-        printf("Warning: Could not open file for reading: %s\n", filename);
+        printf("Avertissement: Impossible d'ouvrir le fichier pour la lecture: %s\n", nomFichier);
         return NULL;
     }
     
-    Medecin* head = NULL;
-    char line[MAX_NAME_LENGTH + MAX_SPECIALITY_LENGTH + 50];
+    Medecin* tete = NULL;
+    char ligne[MAX_NOM_LONGUEUR + MAX_SPECIALITE_LONGUEUR + 50];
     
-    while (fgets(line, sizeof(line), file) != NULL) {
+    while (fgets(ligne, sizeof(ligne), file) != NULL) {
         int id;
-        char name[MAX_NAME_LENGTH];
-        char speciality[MAX_SPECIALITY_LENGTH];
+        char nom[MAX_NOM_LONGUEUR];
+        char specialite[MAX_SPECIALITE_LONGUEUR];
         
-        if (sscanf(line, "%d,%[^,],%[^,\n]", &id, name, speciality) == 3) {
-            Medecin* newMedecin = createMedecin(id, name, speciality);
-            if (newMedecin != NULL) {
-                head = addMedecin(head, newMedecin);
+        if (sscanf(ligne, "%d,%[^,],%[^\n]", &id, nom, specialite) == 3) {
+            Medecin* nouveauMedecin = creerMedecin(id, nom, specialite);
+            if (nouveauMedecin != NULL) {
+                tete = ajouterMedecin(tete, nouveauMedecin);
             }
         }
     }
     
     fclose(file);
-    return head;
+    return tete;
 }
 
-int saveRendezVous(const RendezVous* head, const char* filename) {
+int sauvegarderRendezVous(const RendezVous* tete, const char* nomFichier) {
     // Essayer de créer le répertoire data avant d'ouvrir le fichier
     system("mkdir data 2> nul");
     
-    FILE* file = fopen(filename, "w");
+    FILE* file = fopen(nomFichier, "w");
     if (file == NULL) {
-        printf("Error: Could not open file for writing: %s\n", filename);
+        printf("Erreur: Impossible d'ouvrir le fichier pour l'écriture: %s\n", nomFichier);
         return 0;
     }
     
-    const RendezVous* current = head;
+    const RendezVous* courant = tete;
     int count = 0;
     
-    while (current != NULL) {
+    while (courant != NULL) {
         fprintf(file, "%d,%d,%d,%d,%d,%d,%d,%d\n", 
-                current->id, 
-                current->patientId, 
-                current->medecinId,
-                current->date.jour,
-                current->date.mois,
-                current->date.annee,
-                current->date.heure,
-                current->date.minute);
-        
-        current = current->next;
+                courant->id, 
+                courant->patientId,
+                courant->medecinId,
+                courant->date.jour,
+                courant->date.mois,
+                courant->date.annee,
+                courant->date.heure,
+                courant->date.minute);
         count++;
+        courant = courant->suivant;
     }
     
     fclose(file);
     return count;
 }
 
-RendezVous* loadRendezVous(const char* filename) {
-    FILE* file = fopen(filename, "r");
+RendezVous* chargerRendezVous(const char* nomFichier) {
+    FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {
-        printf("Warning: Could not open file for reading: %s\n", filename);
+        printf("Avertissement: Impossible d'ouvrir le fichier pour la lecture: %s\n", nomFichier);
         return NULL;
     }
     
-    RendezVous* head = NULL;
-    char line[100];
+    RendezVous* tete = NULL;
+    char ligne[100];
     
-    while (fgets(line, sizeof(line), file) != NULL) {
+    while (fgets(ligne, sizeof(ligne), file) != NULL) {
         int id, patientId, medecinId;
         Date date;
         
-        if (sscanf(line, "%d,%d,%d,%d,%d,%d,%d,%d", 
+        if (sscanf(ligne, "%d,%d,%d,%d,%d,%d,%d,%d", 
                   &id, &patientId, &medecinId, 
                   &date.jour, &date.mois, &date.annee, 
                   &date.heure, &date.minute) == 8) {
             
-            RendezVous* newRendezVous = createRendezVous(id, patientId, medecinId, date);
-            if (newRendezVous != NULL) {
-                head = addRendezVous(head, newRendezVous);
+            RendezVous* nouveauRendezVous = creerRendezVous(id, patientId, medecinId, date);
+            if (nouveauRendezVous != NULL) {
+                tete = ajouterRendezVous(tete, nouveauRendezVous);
             }
         }
     }
     
     fclose(file);
-    return head;
+    return tete;
 }

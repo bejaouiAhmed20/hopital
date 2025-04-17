@@ -7,82 +7,99 @@
 #include "../include/fichier.h"
 #include "../include/ui.h"
 
+// Chemins des fichiers de données
 #define PATIENTS_FILE "data/patients.txt"
 #define MEDECINS_FILE "data/medecins.txt"
 #define RENDEZ_VOUS_FILE "data/rendez_vous.txt"
 
 int main() {
-    Patient* patientList = NULL;
-    Medecin* medecinList = NULL;
-    RendezVous* rendezVousList = NULL;
-    int choice;
+    // Initialisation des listes
+    Patient* listePatients = NULL;
+    Medecin* listeMedecins = NULL;
+    RendezVous* listeRendezVous = NULL;
+    int choix;
     
-    patientList = loadPatients(PATIENTS_FILE);
-    medecinList = loadMedecins(MEDECINS_FILE);
-    rendezVousList = loadRendezVous(RENDEZ_VOUS_FILE);
+    // Chargement des données depuis les fichiers
+    listePatients = chargerPatients(PATIENTS_FILE);
+    listeMedecins = chargerMedecins(MEDECINS_FILE);
+    listeRendezVous = chargerRendezVous(RENDEZ_VOUS_FILE);
     
-    printf("Système de Gestion Hospitalière\n");
-    printf("===============================\n");
-    
+    // Boucle principale du programme
     do {
-        displayMainMenu();
-        scanf("%d", &choice);
-        getchar();
+        // Afficher le menu et obtenir le choix de l'utilisateur
+        afficherMenuPrincipal();
+        scanf("%d", &choix);
+        getchar(); // Pour consommer le caractère de nouvelle ligne
         
-        switch (choice) {
-            case 1:
-                addNewPatientMenu(&patientList);
-                break;
-            case 2:
-                displayAllPatientsMenu(patientList);
-                break;
-            case 3:
-                searchPatientByIdMenu(patientList);
-                break;
-            case 4:
-                displayPatientListReverseMenu(patientList);
-                break;
-            case 5:
-                addNewMedecinMenu(&medecinList);
-                break;
-            case 6:
-                displayAllMedecinsMenu(medecinList);
-                break;
-            case 7:
-                searchMedecinByIdMenu(medecinList);
-                break;
-            case 8:
-                addNewRendezVousMenu(&rendezVousList, patientList, medecinList);
-                break;
-            case 9:
-                displayAllRendezVousMenu(rendezVousList, patientList, medecinList);
-                break;
-            case 10:
-                searchRendezVousByIdMenu(rendezVousList, patientList, medecinList);
-                break;
-            case 11:
-                saveDataMenu(patientList, medecinList, rendezVousList, 
-                            PATIENTS_FILE, MEDECINS_FILE, RENDEZ_VOUS_FILE);
-                break;
+        // Traiter le choix de l'utilisateur
+        switch (choix) {
             case 0:
-                printf("Sortie du programme. Sauvegarde des données...\n");
+                printf("Fermeture du programme...\n");
                 break;
+                
+            case 1:
+                ajouterNouveauPatientMenu(&listePatients);
+                break;
+                
+            case 2:
+                afficherTousPatientsMenu(listePatients);
+                break;
+                
+            case 3:
+                rechercherPatientParIdMenu(listePatients);
+                break;
+                
+            case 4:
+                afficherListePatientsInverseMenu(listePatients);
+                break;
+                
+            case 5:
+                ajouterNouveauMedecinMenu(&listeMedecins);
+                break;
+                
+            case 6:
+                afficherTousMedecinsMenu(listeMedecins);
+                break;
+                
+            case 7:
+                rechercherMedecinParIdMenu(listeMedecins);
+                break;
+                
+            case 8:
+                ajouterNouveauRendezVousMenu(&listeRendezVous, listePatients, listeMedecins);
+                break;
+                
+            case 9:
+                afficherTousRendezVousMenu(listeRendezVous, listePatients, listeMedecins);
+                break;
+                
+            case 10:
+                rechercherRendezVousParIdMenu(listeRendezVous, listePatients, listeMedecins);
+                break;
+                
+            case 11:
+                sauvegarderDonneesMenu(listePatients, listeMedecins, listeRendezVous, 
+                                     PATIENTS_FILE, MEDECINS_FILE, RENDEZ_VOUS_FILE);
+                break;
+                
             default:
                 printf("Choix invalide. Veuillez réessayer.\n");
         }
         
-        printf("\nAppuyez sur Entrée pour continuer...");
-        getchar();
+        // Pause pour permettre à l'utilisateur de lire les résultats
+        if (choix != 0) {
+            printf("\nAppuyez sur Entrée pour continuer...");
+            getchar();
+        }
         
-    } while (choice != 0);
+    } while (choix != 0);
     
-    saveDataMenu(patientList, medecinList, rendezVousList, 
-                PATIENTS_FILE, MEDECINS_FILE, RENDEZ_VOUS_FILE);
+    // Libération de la mémoire allouée pour les listes
+    libererListePatients(listePatients);
+    libererListeMedecins(listeMedecins);
+    libererListeRendezVous(listeRendezVous);
     
-    freePatientList(patientList);
-    freeMedecinList(medecinList);
-    freeRendezVousList(rendezVousList);
-    
+    // Message de fin
     printf("Au revoir!\n");
-    return 0;
+    return 0; // Fin du programme avec code de retour 0 (succès)
 }

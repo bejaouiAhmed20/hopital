@@ -3,108 +3,115 @@
 #include <stdlib.h>
 #include <string.h>
 
-Patient* createPatient(int id, const char* name, int age, const char* condition, Priority priority) {
-    Patient* newPatient = (Patient*)malloc(sizeof(Patient));
-    if (newPatient == NULL) {
+Patient* creerPatient(int id, const char* nom, int age, const char* condition, Priorite priorite) {
+    Patient* nouveauPatient = (Patient*)malloc(sizeof(Patient));
+    if (nouveauPatient == NULL) {
         printf("Error: Memory allocation failed\n");
         return NULL;
     }
     
-    newPatient->id = id;
-    strncpy(newPatient->name, name, MAX_NAME_LENGTH - 1);
-    newPatient->name[MAX_NAME_LENGTH - 1] = '\0';
-    newPatient->age = age;
-    strncpy(newPatient->condition, condition, MAX_CONDITION_LENGTH - 1);
-    newPatient->condition[MAX_CONDITION_LENGTH - 1] = '\0';
-    newPatient->priority = priority;
-    newPatient->next = NULL;
+    nouveauPatient->id = id;
+    strncpy(nouveauPatient->nom, nom, MAX_NOM_LONGUEUR - 1);
+    nouveauPatient->nom[MAX_NOM_LONGUEUR - 1] = '\0';
+    nouveauPatient->age = age;
+    strncpy(nouveauPatient->condition, condition, MAX_CONDITION_LONGUEUR - 1);
+    nouveauPatient->condition[MAX_CONDITION_LONGUEUR - 1] = '\0';
+    nouveauPatient->priorite = priorite;
+    nouveauPatient->suivant = NULL;
     
-    return newPatient;
+    return nouveauPatient;
 }
 
-Patient* addPatient(Patient* head, Patient* newPatient) {
-    if (head == NULL) {
-        return newPatient;
+Patient* ajouterPatient(Patient* tete, Patient* nouveauPatient) {
+    if (tete == NULL) {
+        return nouveauPatient;
     }
     
-    Patient* current = head;
-    while (current->next != NULL) {
-        current = current->next;
+    Patient* courant = tete;
+    while (courant->suivant != NULL) {
+        courant = courant->suivant;
     }
     
-    current->next = newPatient;
-    return head;
+    courant->suivant = nouveauPatient;
+    return tete;
 }
 
-void displayPatient(const Patient* patient) {
+void afficherPatient(const Patient* patient) {
     if (patient == NULL) {
-        printf("Le patient n'existe pas\n");
+        printf("Patient invalide\n");
         return;
     }
     
     printf("ID: %d\n", patient->id);
-    printf("Nom: %s\n", patient->name);
+    printf("Nom: %s\n", patient->nom);
     printf("Âge: %d\n", patient->age);
     printf("Condition: %s\n", patient->condition);
+    printf("Priorité: ");
     
-    const char* priorityStr;
-    switch (patient->priority) {
-        case EMERGENCY: priorityStr = "Urgence"; break;
-        case URGENT: priorityStr = "Urgent"; break;
-        case NORMAL: priorityStr = "Normal"; break;
-        case LOW: priorityStr = "Faible"; break;
-        default: priorityStr = "Inconnu"; break;
+    switch (patient->priorite) {
+        case URGENCE:
+            printf("Urgence\n");
+            break;
+        case URGENT:
+            printf("Urgent\n");
+            break;
+        case NORMAL:
+            printf("Normal\n");
+            break;
+        case FAIBLE:
+            printf("Faible\n");
+            break;
+        default:
+            printf("Inconnue\n");
     }
-    
-    printf("Priorité: %s\n", priorityStr);
-    printf("---------------------------\n");
 }
 
-void displayAllPatients(const Patient* head) {
-    if (head == NULL) {
+void afficherTousPatients(const Patient* tete) {
+    if (tete == NULL) {
         printf("Aucun patient dans le système\n");
         return;
     }
     
-    printf("\n===== Tous les Patients =====\n");
+    const Patient* courant = tete;
+    int count = 0;
     
-    const Patient* current = head;
-    while (current != NULL) {
-        displayPatient(current);
-        current = current->next;
-    }
-}
-
-void displayPatientsReverse(const Patient* head) {
-    if (head == NULL) {
-        return;
+    while (courant != NULL) {
+        printf("\nPatient #%d:\n", ++count);
+        afficherPatient(courant);
+        courant = courant->suivant;
     }
     
-    displayPatientsReverse(head->next);
-    
-    displayPatient(head);
+    printf("\nTotal: %d patient(s)\n", count);
 }
 
-Patient* findPatientById(const Patient* head, int id) {
-    const Patient* current = head;
+void afficherPatientsInverse(const Patient* tete) {
+    if (tete == NULL) return;
     
-    while (current != NULL) {
-        if (current->id == id) {
-            return (Patient*)current;
+    afficherPatientsInverse(tete->suivant);
+    printf("\nPatient:\n");
+    afficherPatient(tete);
+}
+
+Patient* trouverPatientParId(const Patient* tete, int id) {
+    const Patient* courant = tete;
+    
+    while (courant != NULL) {
+        if (courant->id == id) {
+            return (Patient*)courant;
         }
-        current = current->next;
+        courant = courant->suivant;
     }
     
     return NULL;
 }
 
-void freePatientList(Patient* head) {
-    Patient* current = head;
-    Patient* next;
+void libererListePatients(Patient* tete) {
+    Patient* courant = tete;
+    Patient* suivant;
     
-    while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
+    while (courant != NULL) {
+        suivant = courant->suivant;
+        free(courant);
+        courant = suivant;
     }
 }

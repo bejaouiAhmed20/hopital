@@ -3,84 +3,86 @@
 #include <stdlib.h>
 #include <string.h>
 
-Medecin* createMedecin(int id, const char* name, const char* speciality) {
-    Medecin* newMedecin = (Medecin*)malloc(sizeof(Medecin));
-    if (newMedecin == NULL) {
-        printf("Error: Memory allocation failed\n");
+Medecin* creerMedecin(int id, const char* nom, const char* specialite) {
+    Medecin* nouveauMedecin = (Medecin*)malloc(sizeof(Medecin));
+    if (nouveauMedecin == NULL) {
+        printf("Erreur: Échec de l'allocation de mémoire\n");
         return NULL;
     }
     
-    newMedecin->id = id;
-    strncpy(newMedecin->name, name, MAX_NAME_LENGTH - 1);
-    newMedecin->name[MAX_NAME_LENGTH - 1] = '\0';
-    strncpy(newMedecin->speciality, speciality, MAX_SPECIALITY_LENGTH - 1);
-    newMedecin->speciality[MAX_SPECIALITY_LENGTH - 1] = '\0';
-    newMedecin->next = NULL;
+    nouveauMedecin->id = id;
+    strncpy(nouveauMedecin->nom, nom, MAX_NOM_LONGUEUR - 1);
+    nouveauMedecin->nom[MAX_NOM_LONGUEUR - 1] = '\0';
+    strncpy(nouveauMedecin->specialite, specialite, MAX_SPECIALITE_LONGUEUR - 1);
+    nouveauMedecin->specialite[MAX_SPECIALITE_LONGUEUR - 1] = '\0';
+    nouveauMedecin->suivant = NULL;
     
-    return newMedecin;
+    return nouveauMedecin;
 }
 
-Medecin* addMedecin(Medecin* head, Medecin* newMedecin) {
-    if (head == NULL) {
-        return newMedecin;
+Medecin* ajouterMedecin(Medecin* tete, Medecin* nouveauMedecin) {
+    if (tete == NULL) {
+        return nouveauMedecin;
     }
     
-    Medecin* current = head;
-    while (current->next != NULL) {
-        current = current->next;
+    Medecin* courant = tete;
+    while (courant->suivant != NULL) {
+        courant = courant->suivant;
     }
     
-    current->next = newMedecin;
-    return head;
+    courant->suivant = nouveauMedecin;
+    return tete;
 }
 
-void displayMedecin(const Medecin* medecin) {
+void afficherMedecin(const Medecin* medecin) {
     if (medecin == NULL) {
-        printf("Le médecin n'existe pas\n");
+        printf("Médecin invalide\n");
         return;
     }
     
     printf("ID: %d\n", medecin->id);
-    printf("Nom: %s\n", medecin->name);
-    printf("Spécialité: %s\n", medecin->speciality);
-    printf("---------------------------\n");
+    printf("Nom: %s\n", medecin->nom);
+    printf("Spécialité: %s\n", medecin->specialite);
 }
 
-void displayAllMedecins(const Medecin* head) {
-    if (head == NULL) {
+void afficherTousMedecins(const Medecin* tete) {
+    if (tete == NULL) {
         printf("Aucun médecin dans le système\n");
         return;
     }
     
-    printf("\n===== Tous les Médecins =====\n");
+    const Medecin* courant = tete;
+    int count = 0;
     
-    const Medecin* current = head;
-    while (current != NULL) {
-        displayMedecin(current);
-        current = current->next;
+    while (courant != NULL) {
+        printf("\nMédecin #%d:\n", ++count);
+        afficherMedecin(courant);
+        courant = courant->suivant;
     }
+    
+    printf("\nTotal: %d médecin(s)\n", count);
 }
 
-Medecin* findMedecinById(const Medecin* head, int id) {
-    const Medecin* current = head;
+Medecin* trouverMedecinParId(const Medecin* tete, int id) {
+    const Medecin* courant = tete;
     
-    while (current != NULL) {
-        if (current->id == id) {
-            return (Medecin*)current;
+    while (courant != NULL) {
+        if (courant->id == id) {
+            return (Medecin*)courant;
         }
-        current = current->next;
+        courant = courant->suivant;
     }
     
     return NULL;
 }
 
-void freeMedecinList(Medecin* head) {
-    Medecin* current = head;
-    Medecin* next;
+void libererListeMedecins(Medecin* tete) {
+    Medecin* courant = tete;
+    Medecin* suivant;
     
-    while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
+    while (courant != NULL) {
+        suivant = courant->suivant;
+        free(courant);
+        courant = suivant;
     }
 }

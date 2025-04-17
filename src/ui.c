@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void displayMainMenu() {
+void afficherMenuPrincipal() {
     printf("\n===== SYSTÈME DE GESTION HOSPITALIÈRE =====\n");
     printf("1. Ajouter un nouveau patient\n");
     printf("2. Afficher tous les patients\n");
@@ -21,62 +21,72 @@ void displayMainMenu() {
     printf("Entrez votre choix: ");
 }
 
-void addNewPatientMenu(Patient** patientList) {
-    int id, age;
-    char name[MAX_NAME_LENGTH];
-    char condition[MAX_CONDITION_LENGTH];
-    int priorityChoice;
-    Priority priority;
+void ajouterNouveauPatientMenu(Patient** listePatients) {
+    int id, age, priorityChoice;
+    char nom[MAX_NOM_LONGUEUR];
+    char condition[MAX_CONDITION_LONGUEUR];
+    Priorite priorite;
     
     printf("\n===== Ajouter un Nouveau Patient =====\n");
     
     printf("Entrez l'ID du patient: ");
     scanf("%d", &id);
-    getchar();
-    
-    if (findPatientById(*patientList, id) != NULL) {
-        printf("Erreur: Un patient avec l'ID %d existe déjà\n", id);
-        return;
-    }
+    getchar(); // Pour consommer le caractère de nouvelle ligne
     
     printf("Entrez le nom du patient: ");
-    fgets(name, MAX_NAME_LENGTH, stdin);
-    name[strcspn(name, "\n")] = '\0';
+    fgets(nom, MAX_NOM_LONGUEUR, stdin);
+    nom[strcspn(nom, "\n")] = 0; // Enlever le caractère de nouvelle ligne
     
     printf("Entrez l'âge du patient: ");
     scanf("%d", &age);
-    getchar();
+    getchar(); // Pour consommer le caractère de nouvelle ligne
     
-    printf("Entrez la condition du patient: ");
-    fgets(condition, MAX_CONDITION_LENGTH, stdin);
-    condition[strcspn(condition, "\n")] = '\0';
+    printf("Entrez la condition médicale du patient: ");
+    fgets(condition, MAX_CONDITION_LONGUEUR, stdin);
+    condition[strcspn(condition, "\n")] = 0; // Enlever le caractère de nouvelle ligne
     
-    printf("Entrez la priorité (1=Urgence, 2=Urgent, 3=Normal, 4=Faible): ");
+    printf("Choisissez la priorité du patient:\n");
+    printf("1. Urgence\n");
+    printf("2. Urgent\n");
+    printf("3. Normal\n");
+    printf("4. Faible\n");
+    printf("Entrez votre choix: ");
     scanf("%d", &priorityChoice);
-    getchar();
+    getchar(); // Pour consommer le caractère de nouvelle ligne
     
-    if (priorityChoice < 1 || priorityChoice > 4) {
-        printf("Priorité invalide. Réglage sur Normal.\n");
-        priority = NORMAL;
-    } else {
-        priority = (Priority)priorityChoice;
+    switch (priorityChoice) {
+        case 1:
+            priorite = URGENCE;
+            break;
+        case 2:
+            priorite = URGENT;
+            break;
+        case 3:
+            priorite = NORMAL;
+            break;
+        case 4:
+            priorite = FAIBLE;
+            break;
+        default:
+            printf("Choix invalide. Utilisation de la priorité normale par défaut.\n");
+            priorite = NORMAL;
     }
     
-    Patient* newPatient = createPatient(id, name, age, condition, priority);
-    if (newPatient != NULL) {
-        *patientList = addPatient(*patientList, newPatient);
-        printf("Patient ajouté avec succès\n");
+    Patient* nouveauPatient = creerPatient(id, nom, age, condition, priorite);
+    if (nouveauPatient != NULL) {
+        *listePatients = ajouterPatient(*listePatients, nouveauPatient);
+        printf("Patient ajouté avec succès!\n");
     } else {
-        printf("Échec de l'ajout du patient\n");
+        printf("Erreur lors de l'ajout du patient.\n");
     }
 }
 
-void displayAllPatientsMenu(Patient* patientList) {
+void afficherTousPatientsMenu(Patient* listePatients) {
     printf("\n===== Afficher Tous les Patients =====\n");
-    displayAllPatients(patientList);
+    afficherTousPatients(listePatients);
 }
 
-void searchPatientByIdMenu(Patient* patientList) {
+void rechercherPatientParIdMenu(Patient* listePatients) {
     int id;
     
     printf("\n===== Rechercher un Patient par ID =====\n");
@@ -84,29 +94,29 @@ void searchPatientByIdMenu(Patient* patientList) {
     scanf("%d", &id);
     getchar();
     
-    Patient* patient = findPatientById(patientList, id);
+    Patient* patient = trouverPatientParId(listePatients, id);
     if (patient != NULL) {
         printf("\nPatient trouvé:\n");
-        displayPatient(patient);
+        afficherPatient(patient);
     } else {
         printf("Aucun patient trouvé avec l'ID %d\n", id);
     }
 }
 
-void displayPatientListReverseMenu(Patient* patientList) {
+void afficherListePatientsInverseMenu(Patient* listePatients) {
     printf("\n===== Afficher les Patients en Ordre Inverse =====\n");
-    if (patientList == NULL) {
+    if (listePatients == NULL) {
         printf("Aucun patient dans le système\n");
         return;
     }
     
-    displayPatientsReverse(patientList);
+    afficherPatientsInverse(listePatients);
 }
 
-void addNewMedecinMenu(Medecin** medecinList) {
+void ajouterNouveauMedecinMenu(Medecin** listeMedecins) {
     int id;
-    char name[MAX_NAME_LENGTH];
-    char speciality[MAX_SPECIALITY_LENGTH];
+    char nom[MAX_NOM_LONGUEUR];
+    char specialite[MAX_SPECIALITE_LONGUEUR];
     
     printf("\n===== Ajouter un Nouveau Médecin =====\n");
     
@@ -114,34 +124,34 @@ void addNewMedecinMenu(Medecin** medecinList) {
     scanf("%d", &id);
     getchar();
     
-    if (findMedecinById(*medecinList, id) != NULL) {
+    if (trouverMedecinParId(*listeMedecins, id) != NULL) {
         printf("Erreur: Un médecin avec l'ID %d existe déjà\n", id);
         return;
     }
     
     printf("Entrez le nom du médecin: ");
-    fgets(name, MAX_NAME_LENGTH, stdin);
-    name[strcspn(name, "\n")] = '\0';
+    fgets(nom, MAX_NOM_LONGUEUR, stdin);
+    nom[strcspn(nom, "\n")] = '\0';
     
     printf("Entrez la spécialité du médecin: ");
-    fgets(speciality, MAX_SPECIALITY_LENGTH, stdin);
-    speciality[strcspn(speciality, "\n")] = '\0';
+    fgets(specialite, MAX_SPECIALITE_LONGUEUR, stdin);
+    specialite[strcspn(specialite, "\n")] = '\0';
     
-    Medecin* newMedecin = createMedecin(id, name, speciality);
-    if (newMedecin != NULL) {
-        *medecinList = addMedecin(*medecinList, newMedecin);
+    Medecin* nouveauMedecin = creerMedecin(id, nom, specialite);
+    if (nouveauMedecin != NULL) {
+        *listeMedecins = ajouterMedecin(*listeMedecins, nouveauMedecin);
         printf("Médecin ajouté avec succès\n");
     } else {
         printf("Échec de l'ajout du médecin\n");
     }
 }
 
-void displayAllMedecinsMenu(Medecin* medecinList) {
+void afficherTousMedecinsMenu(Medecin* listeMedecins) {
     printf("\n===== Afficher Tous les Médecins =====\n");
-    displayAllMedecins(medecinList);
+    afficherTousMedecins(listeMedecins);
 }
 
-void searchMedecinByIdMenu(Medecin* medecinList) {
+void rechercherMedecinParIdMenu(Medecin* listeMedecins) {
     int id;
     
     printf("\n===== Rechercher un Médecin par ID =====\n");
@@ -149,16 +159,16 @@ void searchMedecinByIdMenu(Medecin* medecinList) {
     scanf("%d", &id);
     getchar();
     
-    Medecin* medecin = findMedecinById(medecinList, id);
+    Medecin* medecin = trouverMedecinParId(listeMedecins, id);
     if (medecin != NULL) {
         printf("\nMédecin trouvé:\n");
-        displayMedecin(medecin);
+        afficherMedecin(medecin);
     } else {
         printf("Aucun médecin trouvé avec l'ID %d\n", id);
     }
 }
 
-void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Medecin* medecinList) {
+void ajouterNouveauRendezVousMenu(RendezVous** listeRendezVous, Patient* listePatients, Medecin* listeMedecins) {
     int id, patientId, medecinId;
     Date date;
     
@@ -168,7 +178,7 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     scanf("%d", &id);
     getchar();
     
-    if (findRendezVousById(*rendezVousList, id) != NULL) {
+    if (trouverRendezVousParId(*listeRendezVous, id) != NULL) {
         printf("Erreur: Un rendez-vous avec l'ID %d existe déjà\n", id);
         return;
     }
@@ -177,7 +187,7 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     scanf("%d", &patientId);
     getchar();
     
-    if (findPatientById(patientList, patientId) == NULL) {
+    if (trouverPatientParId(listePatients, patientId) == NULL) {
         printf("Erreur: Aucun patient trouvé avec l'ID %d\n", patientId);
         return;
     }
@@ -186,7 +196,7 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     scanf("%d", &medecinId);
     getchar();
     
-    if (findMedecinById(medecinList, medecinId) == NULL) {
+    if (trouverMedecinParId(listeMedecins, medecinId) == NULL) {
         printf("Erreur: Aucun médecin trouvé avec l'ID %d\n", medecinId);
         return;
     }
@@ -199,21 +209,21 @@ void addNewRendezVousMenu(RendezVous** rendezVousList, Patient* patientList, Med
     scanf("%d %d", &date.heure, &date.minute);
     getchar();
     
-    RendezVous* newRendezVous = createRendezVous(id, patientId, medecinId, date);
-    if (newRendezVous != NULL) {
-        *rendezVousList = addRendezVous(*rendezVousList, newRendezVous);
+    RendezVous* nouveauRendezVous = creerRendezVous(id, patientId, medecinId, date);
+    if (nouveauRendezVous != NULL) {
+        *listeRendezVous = ajouterRendezVous(*listeRendezVous, nouveauRendezVous);
         printf("Rendez-vous ajouté avec succès\n");
     } else {
         printf("Échec de l'ajout du rendez-vous\n");
     }
 }
 
-void displayAllRendezVousMenu(RendezVous* rendezVousList, Patient* patientList, Medecin* medecinList) {
+void afficherTousRendezVousMenu(RendezVous* listeRendezVous, Patient* listePatients, Medecin* listeMedecins) {
     printf("\n===== Afficher Tous les Rendez-vous =====\n");
-    displayAllRendezVous(rendezVousList, patientList, medecinList);
+    afficherTousRendezVous(listeRendezVous, listePatients, listeMedecins);
 }
 
-void searchRendezVousByIdMenu(RendezVous* rendezVousList, Patient* patientList, Medecin* medecinList) {
+void rechercherRendezVousParIdMenu(RendezVous* listeRendezVous, Patient* listePatients, Medecin* listeMedecins) {
     int id;
     
     printf("\n===== Rechercher un Rendez-vous par ID =====\n");
@@ -221,27 +231,27 @@ void searchRendezVousByIdMenu(RendezVous* rendezVousList, Patient* patientList, 
     scanf("%d", &id);
     getchar();
     
-    RendezVous* rendezVous = findRendezVousById(rendezVousList, id);
+    RendezVous* rendezVous = trouverRendezVousParId(listeRendezVous, id);
     if (rendezVous != NULL) {
         printf("\nRendez-vous trouvé:\n");
-        displayRendezVous(rendezVous, patientList, medecinList);
+        afficherRendezVous(rendezVous, listePatients, listeMedecins);
     } else {
         printf("Aucun rendez-vous trouvé avec l'ID %d\n", id);
     }
 }
 
-void saveDataMenu(Patient* patientList, Medecin* medecinList, RendezVous* rendezVousList, 
-                 const char* patientsFile, const char* medecinsFile, const char* rendezVousFile) {
-    printf("\n===== Sauvegarder les Donnees =====\n");
+void sauvegarderDonneesMenu(Patient* listePatients, Medecin* listeMedecins, RendezVous* listeRendezVous, 
+                           const char* fichierPatients, const char* fichierMedecins, const char* fichierRendezVous) {
+    printf("\n===== Sauvegarder les Données =====\n");
     
-    int patientsSaved = savePatients(patientList, patientsFile);
-    printf("Patients sauvegardes: %d\n", patientsSaved);
+    int patientsSaved = sauvegarderPatients(listePatients, fichierPatients);
+    printf("Patients sauvegardés: %d\n", patientsSaved);
     
-    int medecinsSaved = saveMedecins(medecinList, medecinsFile);
-    printf("Medecins sauvegardes: %d\n", medecinsSaved);
+    int medecinsSaved = sauvegarderMedecins(listeMedecins, fichierMedecins);
+    printf("Médecins sauvegardés: %d\n", medecinsSaved);
     
-    int rendezVousSaved = saveRendezVous(rendezVousList, rendezVousFile);
-    printf("Rendez-vous sauvegardes: %d\n", rendezVousSaved);
+    int rendezVousSaved = sauvegarderRendezVous(listeRendezVous, fichierRendezVous);
+    printf("Rendez-vous sauvegardés: %d\n", rendezVousSaved);
     
-    printf("Toutes les donnees ont ete sauvegardees avec succes!\n");
+    printf("Toutes les données ont été sauvegardées avec succès!\n");
 }
