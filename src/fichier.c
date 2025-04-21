@@ -1,10 +1,14 @@
+// Fichier de gestion des données persistantes
+// Contient les fonctions pour sauvegarder et charger les données
+
 #include "../include/fichier.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// Sauvegarde la liste des patients dans un fichier
 int sauvegarderPatients(const Patient* tete, const char* nomFichier) {
-    // Essayer de créer le répertoire data avant d'ouvrir le fichier
+    // Créer le dossier data si nécessaire
     system("mkdir data 2> nul");
     
     FILE* file = fopen(nomFichier, "w");
@@ -31,6 +35,7 @@ int sauvegarderPatients(const Patient* tete, const char* nomFichier) {
     return count;
 }
 
+// Charge la liste des patients depuis un fichier
 Patient* chargerPatients(const char* nomFichier) {
     FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {
@@ -60,6 +65,7 @@ Patient* chargerPatients(const char* nomFichier) {
     return tete;
 }
 
+// Sauvegarde la liste des médecins dans un fichier
 int sauvegarderMedecins(const Medecin* tete, const char* nomFichier) {
     // Essayer de créer le répertoire data avant d'ouvrir le fichier
     system("mkdir data 2> nul");
@@ -86,6 +92,7 @@ int sauvegarderMedecins(const Medecin* tete, const char* nomFichier) {
     return count;
 }
 
+// Charge la liste des médecins depuis un fichier
 Medecin* chargerMedecins(const char* nomFichier) {
     FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {
@@ -113,6 +120,7 @@ Medecin* chargerMedecins(const char* nomFichier) {
     return tete;
 }
 
+// Sauvegarde la liste des rendez-vous dans un fichier
 int sauvegarderRendezVous(const RendezVous* tete, const char* nomFichier) {
     // Essayer de créer le répertoire data avant d'ouvrir le fichier
     system("mkdir data 2> nul");
@@ -144,6 +152,7 @@ int sauvegarderRendezVous(const RendezVous* tete, const char* nomFichier) {
     return count;
 }
 
+// Charge la liste des rendez-vous depuis un fichier
 RendezVous* chargerRendezVous(const char* nomFichier) {
     FILE* file = fopen(nomFichier, "r");
     if (file == NULL) {

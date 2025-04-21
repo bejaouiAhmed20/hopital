@@ -1,3 +1,6 @@
+// Gestion des rendez-vous
+// Contient les fonctions pour créer, ajouter et afficher les rendez-vous
+
 #include "../include/rendez_vous.h"
 #include "../include/patient.h"
 #include "../include/medecin.h"
@@ -5,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Crée un nouveau rendez-vous avec les informations données
 RendezVous* creerRendezVous(int id, int patientId, int medecinId, Date date) {
     RendezVous* nouveauRendezVous = (RendezVous*)malloc(sizeof(RendezVous));
     if (nouveauRendezVous == NULL) {
@@ -21,7 +25,9 @@ RendezVous* creerRendezVous(int id, int patientId, int medecinId, Date date) {
     return nouveauRendezVous;
 }
 
+// Ajoute un rendez-vous à la liste chaînée
 RendezVous* ajouterRendezVous(RendezVous* tete, RendezVous* nouveauRendezVous) {
+    // Vérifie si l'ID existe déjà
     RendezVous* existingRendezVous = trouverRendezVousParId(tete, nouveauRendezVous->id);
     if (existingRendezVous != NULL) {
         printf("Erreur: Un rendez-vous avec l'ID %d existe déjà dans le système.\n", nouveauRendezVous->id);
@@ -42,6 +48,7 @@ RendezVous* ajouterRendezVous(RendezVous* tete, RendezVous* nouveauRendezVous) {
     return tete;
 }
 
+// Affiche les informations d'un rendez-vous
 void afficherRendezVous(const RendezVous* rendezVous, const Patient* listePatients, const Medecin* listeMedecins) {
     if (rendezVous == NULL) {
         printf("Rendez-vous invalide\n");
@@ -69,6 +76,7 @@ void afficherRendezVous(const RendezVous* rendezVous, const Patient* listePatien
            rendezVous->date.heure, rendezVous->date.minute);
 }
 
+// Affiche tous les rendez-vous de la liste
 void afficherTousRendezVous(const RendezVous* tete, const Patient* listePatients, const Medecin* listeMedecins) {
     if (tete == NULL) {
         printf("Aucun rendez-vous dans le système\n");
@@ -87,6 +95,7 @@ void afficherTousRendezVous(const RendezVous* tete, const Patient* listePatients
     printf("\nTotal: %d rendez-vous\n", count);
 }
 
+// Trouve un rendez-vous par son ID
 RendezVous* trouverRendezVousParId(const RendezVous* tete, int id) {
     const RendezVous* courant = tete;
     
@@ -100,6 +109,7 @@ RendezVous* trouverRendezVousParId(const RendezVous* tete, int id) {
     return NULL;
 }
 
+// Libère la mémoire de la liste des rendez-vous
 void libererListeRendezVous(RendezVous* tete) {
     RendezVous* courant = tete;
     RendezVous* suivant;

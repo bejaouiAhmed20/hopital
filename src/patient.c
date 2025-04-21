@@ -1,8 +1,12 @@
+// Gestion des patients
+// Contient les fonctions pour créer, ajouter et afficher les patients
+
 #include "../include/patient.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// Crée un nouveau patient avec les informations données
 Patient* creerPatient(int id, const char* nom, int age, const char* condition, Priorite priorite) {
     Patient* nouveauPatient = (Patient*)malloc(sizeof(Patient));
     if (nouveauPatient == NULL) {
@@ -22,7 +26,9 @@ Patient* creerPatient(int id, const char* nom, int age, const char* condition, P
     return nouveauPatient;
 }
 
+// Ajoute un patient à la liste chaînée
 Patient* ajouterPatient(Patient* tete, Patient* nouveauPatient) {
+    // Vérifie si l'ID existe déjà
     Patient* existingPatient = trouverPatientParId(tete, nouveauPatient->id);
     if (existingPatient != NULL) {
         printf("Erreur: Un patient avec l'ID %d existe déjà dans le système.\n", nouveauPatient->id);
@@ -43,6 +49,7 @@ Patient* ajouterPatient(Patient* tete, Patient* nouveauPatient) {
     return tete;
 }
 
+// Affiche les informations d'un patient
 void afficherPatient(const Patient* patient) {
     if (patient == NULL) {
         printf("Patient invalide\n");
@@ -73,6 +80,7 @@ void afficherPatient(const Patient* patient) {
     }
 }
 
+// Affiche tous les patients de la liste
 void afficherTousPatients(const Patient* tete) {
     if (tete == NULL) {
         printf("Aucun patient dans le système\n");
@@ -91,6 +99,7 @@ void afficherTousPatients(const Patient* tete) {
     printf("\nTotal: %d patient(s)\n", count);
 }
 
+// Affiche les patients dans l'ordre inverse (récursif)
 void afficherPatientsInverse(const Patient* tete) {
     if (tete == NULL) return;
     
@@ -99,6 +108,7 @@ void afficherPatientsInverse(const Patient* tete) {
     afficherPatient(tete);
 }
 
+// Trouve un patient par son ID
 Patient* trouverPatientParId(const Patient* tete, int id) {
     const Patient* courant = tete;
     
@@ -112,6 +122,7 @@ Patient* trouverPatientParId(const Patient* tete, int id) {
     return NULL;
 }
 
+// Libère la mémoire de la liste des patients
 void libererListePatients(Patient* tete) {
     Patient* courant = tete;
     Patient* suivant;
