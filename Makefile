@@ -1,40 +1,31 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
-SRC_DIR = src
-INCLUDE_DIR = include
-OBJ_DIR = obj
-BIN_DIR = bin
+CFLAGS = -g -Wall
+CXXFLAGS = -IInclude
+LIB = -lm
 
-# List of source files
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-# Generate object file names from source files
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
-# Executable name
-EXEC = $(BIN_DIR)/gestion_hopital
+main: main.o patient.o medecin.o rendez_vous.o fichier.o ui.o
+	$(CC) $(CFLAGS) -o main main.o patient.o medecin.o rendez_vous.o fichier.o ui.o $(CXXFLAGS) $(LIB)
 
-# Default target
-all: directories $(EXEC)
+main.o: src/main.c
+	$(CC) $(CFLAGS) -c src/main.c -o main.o $(CXXFLAGS)
 
-# Create necessary directories for Windows
-directories:
-	@if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
-	@if not exist $(BIN_DIR) mkdir $(BIN_DIR)
+patient.o: src/patient.c
+	$(CC) $(CFLAGS) -c src/patient.c -o patient.o $(CXXFLAGS)
 
-# Link object files to create executable
-$(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+medecin.o: src/medecin.c
+	$(CC) $(CFLAGS) -c src/medecin.c -o medecin.o $(CXXFLAGS)
 
-# Compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+rendez_vous.o: src/rendez_vous.c
+	$(CC) $(CFLAGS) -c src/rendez_vous.c -o rendez_vous.o $(CXXFLAGS)
 
-# Clean up generated files (Windows version)
+fichier.o: src/fichier.c
+	$(CC) $(CFLAGS) -c src/fichier.c -o fichier.o $(CXXFLAGS)
+
+ui.o: src/ui.c
+	$(CC) $(CFLAGS) -c src/ui.c -o ui.o $(CXXFLAGS)
+
+run:
+	.\main
+
 clean:
-	@if exist $(OBJ_DIR) rmdir /s /q $(OBJ_DIR)
-	@if exist $(BIN_DIR) rmdir /s /q $(BIN_DIR)
-
-# Run the program
-run: all
-	$(EXEC)
-
-.PHONY: all directories clean run
+	del *.o main.exe

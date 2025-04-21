@@ -21,6 +21,14 @@ Medecin* creerMedecin(int id, const char* nom, const char* specialite) {
 }
 
 Medecin* ajouterMedecin(Medecin* tete, Medecin* nouveauMedecin) {
+    
+    Medecin* existingMedecin = trouverMedecinParId(tete, nouveauMedecin->id);
+    if (existingMedecin != NULL) {
+        printf("Erreur: Un médecin avec l'ID %d existe déjà dans le système.\n", nouveauMedecin->id);
+        free(nouveauMedecin); 
+        return tete;
+    }
+    
     if (tete == NULL) {
         return nouveauMedecin;
     }

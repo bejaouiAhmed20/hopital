@@ -1,4 +1,3 @@
-1,2,3,4,4
 2,ahmed,22,good,1
 3,mohamed,22,1,3
 4,ahmed,20,noraml,2
@@ -6,3 +5,4 @@
 10,ahmed,6422476,ohamed,1
 6,salem,50,normal,4
 7,aziz,20,normal,1
+1,yassine,22,normal,4

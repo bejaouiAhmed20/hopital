@@ -23,6 +23,13 @@ Patient* creerPatient(int id, const char* nom, int age, const char* condition, P
 }
 
 Patient* ajouterPatient(Patient* tete, Patient* nouveauPatient) {
+    Patient* existingPatient = trouverPatientParId(tete, nouveauPatient->id);
+    if (existingPatient != NULL) {
+        printf("Erreur: Un patient avec l'ID %d existe déjà dans le système.\n", nouveauPatient->id);
+        free(nouveauPatient); 
+        return tete;
+    }
+    
     if (tete == NULL) {
         return nouveauPatient;
     }

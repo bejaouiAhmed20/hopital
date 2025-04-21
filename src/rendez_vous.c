@@ -22,6 +22,13 @@ RendezVous* creerRendezVous(int id, int patientId, int medecinId, Date date) {
 }
 
 RendezVous* ajouterRendezVous(RendezVous* tete, RendezVous* nouveauRendezVous) {
+    RendezVous* existingRendezVous = trouverRendezVousParId(tete, nouveauRendezVous->id);
+    if (existingRendezVous != NULL) {
+        printf("Erreur: Un rendez-vous avec l'ID %d existe déjà dans le système.\n", nouveauRendezVous->id);
+        free(nouveauRendezVous); 
+        return tete;
+    }
+    
     if (tete == NULL) {
         return nouveauRendezVous;
     }
